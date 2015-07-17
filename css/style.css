@@ -1,0 +1,30 @@
+
+body {
+
+	width:100%;
+	/*background: #f1c40f;*/
+	background:url(http://subtlepatterns.com/patterns/purty_wood.png) repeat;
+ } 
+
+h1{
+	font-weight: bold;
+	font-size: 100px;
+
+	text-shadow: 0 0 10px white,
+	 			 0 0 10px white, 
+	 			 0 0 10px white, 
+	 			 0 0 10px white;
+}
+
+.lead{
+	font-size: 45px;
+}
+
+
+#message{
+  font-size: 150px;
+  position:relative;
+}
+
+
+
