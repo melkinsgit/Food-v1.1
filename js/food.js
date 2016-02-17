@@ -1,12 +1,7 @@
 function GetFood()
 {
-   var foodArray = ["pizza","apple","orange","burrito",
-   					"cake","soda","poptarts","guacamole",
-   					"taco","hamburger","casserole","pickle",
-   					"salad","mashed potatoes", "corn", "meatloaf",
-   					"Gyro","roast beef sandwich", "egg rolls",
-   					"fresh fruit","apple pie", "spaghetti", "lo mein",
-   					"Pho Dac Beit", "Jollof Rice", "Stir Fry", "Pad Thai" 
+   var foodArray = ["listen to classical","eat a great dessert","go to a zoo","visit the arboretum",
+   					"visit a conservatory"
    					];
 
    var random = foodArray[Math.floor(Math.random() * foodArray.length)];
@@ -19,7 +14,7 @@ $('.btn').click(function(){
 		var $this = $(this);
 		$this.toggleClass('btn');
 		if($this.hasClass('btn')){
-			$this.text('Eat..');			
+			$this.text('Entertain me ..');
 		} else {
 			$this.text('Something Else...');
 		}
@@ -38,7 +33,7 @@ function getName(){
 	var person = prompt("What is your name?", "");
 
 	if(person != null){
-		document.getElementById("name").innerHTML =  person + ", Click the button to decide what to eat!";
+		document.getElementById("name").innerHTML =  person + ", Click the button to decide what to do!";
 	}
 	
 }
