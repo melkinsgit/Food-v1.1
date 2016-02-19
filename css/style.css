@@ -1,10 +1,14 @@
-
 body {
 
-	width:100%;
-	/*background: #f1c40f;*/
-	background:url(http://subtlepatterns.com/patterns/purty_wood.png) repeat;
- } 
+	font: 20px "Montserrat", sans-serif;
+	line-height: 1.8;
+	color: #f5f6f7;
+	/*background: url(http://subtlepatterns.com/patterns/purty_wood.png) repeat;*/
+ }
+
+.jumbotron {
+	background-color: chartreuse;
+}
 
 h1{
 	font-weight: bold;
@@ -20,11 +24,90 @@ h1{
 	font-size: 45px;
 }
 
-
+/* I changed font-size; I added bg color*/
 #message{
-  font-size: 150px;
-  position:relative;
+	font-size: 90px;
+	position:relative;
+	background-color: #00fa9a
 }
 
+/* I added this */
+.centerText {
+	text-align: center;
+}
+
+
+/* FROM SIMPLY ME ____________________________________________________________________________ */
+
+
+body {
+	font: 20px "Montserrat", sans-serif;
+	line-height: 1.8;
+	color: #f5f6f7;
+}
+
+p {
+	font-size: 16px;
+}
+
+.bg1 {
+	background-color: #82D8ff;
+	color: orange;
+}
+
+.bg2 {
+	background-color: #857755;
+	color: orange;
+}
+
+.bg3 {
+	background-color: #AACAE2;
+	color: orange;
+}
+
+.bg4 {
+	background-color: #a99b7a;
+}
+
+#p2 {
+	color: #2cb4ff;
+}
+
+#bar1 {
+	background-color: #adcc68;
+	height: 20px;
+}
+
+#bar2 {
+	background-color: #8fb240;
+	height: 20px;
+}
+
+.p3 {
+	color: #393a32;
+}
+
+.container-fluid {
+	padding-top: 70px;
+	padding-bottom: 70px;
+}
+
+.navbar{
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border: 0;
+	border-radius: 0;
+	margin-bottom: 0;
+	font-size: 12px;
+	letter-spacing: 5px;
+}
+
+.navbar-nav li a:hover {
+	color: #1abc9c !important;
+}
+
+.margin {
+	margin-bottom: 45px;
+}
 
 

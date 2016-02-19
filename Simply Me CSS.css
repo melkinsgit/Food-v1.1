@@ -1,0 +1,75 @@
+/*STYLES:  Pallette came from http://www.colorhunter.com/browse.php?h=y&p=http%3A%2F%2Fwww.colorhunter.com%2Fuploads%2F428.jpg and was based on the colors in the hiker image I used at the top of my page. I also looked for a paletter to match one of the colors the first palette finder came up. That took me to this palette http://www.colormixture.com/857756.*/
+
+body {
+    font: 20px "Montserrat", sans-serif;
+    line-height: 1.8;
+    color: #f5f6f7;
+}
+
+p {
+    font-size: 16px;
+}
+
+.bg1 {
+    background-color: #82D8ff;
+    color: orange;
+}
+
+.bg2 {
+    background-color: #d4c7a9;
+    color: orange;
+}
+
+.bg3 {
+    background-color: #AACAE2;
+    color: orange;
+}
+
+.bg4 {
+    background-color: #a99b7a;
+}
+
+#p2 {
+    color: #2cb4ff;
+}
+
+#bar1 {
+    background-color: #d7f09f;
+    height: 8px;
+}
+
+#bar2 {
+    background-color: #8fb240;
+    height: 20px;
+}
+
+.p3 {
+    color: #393a32;
+}
+
+.container-fluid {
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+.navbar{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border: 0;
+    border-radius: 0;
+    margin-bottom: 0;
+    font-size: 12px;
+    letter-spacing: 5px;
+}
+
+.navbar-nav li a:hover {
+    color: #1abc9c !important;
+}
+
+.margin {
+    margin-bottom: 45px;
+}
+
+#bar1, #bar2 {
+    height: 10px;
+}
