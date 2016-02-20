@@ -14,149 +14,168 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <link href="http://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+
     <!-- My custom CSS -->
     <link rel="stylesheet" type="text/css" href="FunThingsToDoCSS.css">
 
     <!-- My javascript code HAS TO BE AT END OF BODY BECAUSE NOT ON READY FN -->
     <!--<script src="js/ToDoMethods.js"></script>-->
 </head>
+
 <body>
 
-<!-- NAV BAR -->
-<nav class="navbar navbar-default">
+    <!-- NAV BAR -->
+    <nav class="navbar navbar-default">
 
-    <div class="container">
+        <div class="container">
 
-        <div class="navbar-header">
+            <div class="navbar-header">
 
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
 
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
 
-            </button>
+                </button>
 
-            <a class="navbar-brand" href="#">WHAT I LIKE ...</a>
+                <a class="navbar-brand" href="#">WHAT I LIKE ...</a>
 
-        </div>
+            </div>
 
-        <div class="collapse navbar-collapse" id="myNavbar">
+            <div class="collapse navbar-collapse" id="myNavbar">
 
-            <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right">
 
-                <li class="dropdown" id="thingsToDo">
-                    <a href="#" class="dropdown-toggle" data-toggle = "dropdown">things to do</a>
-                    <ul class = "dropdown-menu" id="doThingsDropDown">
-                    </ul>
-                </li>
-                <li id="thingsToSee"><a href="#" class="dropdown-toggle" data-toggle = "dropdown">things to see</a>
-                    <ul class = "dropdown-menu" id="seeThingsDropDown">
-                    </ul
-                ></li>
-                <li id="thingsToEat"><a href="#" class="dropdown-toggle" data-toggle = "dropdown">things to eat</a>
-                    <ul class = "dropdown-menu" id="eatThingsDropDown">
-                    </ul>
-                </li>
+                    <li class="dropdown" id="thingsToDo">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">things to do</a>
+                        <ul class="dropdown-menu" id="doThingsDropDown">
+                        </ul>
+                    </li>
+                    <li id="thingsToSee"><a href="#" class="dropdown-toggle" data-toggle="dropdown">things to see</a>
+                        <ul class="dropdown-menu" id="seeThingsDropDown">
+                        </ul
+                        >
+                    </li>
+                    <li id="thingsToEat"><a href="#" class="dropdown-toggle" data-toggle="dropdown">things to eat</a>
+                        <ul class="dropdown-menu" id="eatThingsDropDown">
+                        </ul>
+                    </li>
 
-            </ul>
+                </ul>
 
 
-            <!-- Based above menu on the following from: http://www.tutorialspoint.com/bootstrap/bootstrap_navbar.htm-->
-            <!--<li class = "dropdown">-->
+                <!-- Based above menu on the following from: http://www.tutorialspoint.com/bootstrap/bootstrap_navbar.htm-->
+                <!--<li class = "dropdown">-->
                 <!--<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">-->
-                    <!--Java-->
-                    <!--<b class = "caret"></b>-->
+                <!--Java-->
+                <!--<b class = "caret"></b>-->
                 <!--</a>-->
 
                 <!--<ul class = "dropdown-menu">-->
-                    <!--<li><a href = "#">jmeter</a></li>-->
-                    <!--<li><a href = "#">EJB</a></li>-->
-                    <!--<li><a href = "#">Jasper Report</a></li>-->
+                <!--<li><a href = "#">jmeter</a></li>-->
+                <!--<li><a href = "#">EJB</a></li>-->
+                <!--<li><a href = "#">Jasper Report</a></li>-->
 
-                    <!--<li class = "divider"></li>-->
-                    <!--<li><a href = "#">Separated link</a></li>-->
+                <!--<li class = "divider"></li>-->
+                <!--<li><a href = "#">Separated link</a></li>-->
 
-                    <!--<li class = "divider"></li>-->
-                    <!--<li><a href = "#">One more separated link</a></li>-->
+                <!--<li class = "divider"></li>-->
+                <!--<li><a href = "#">One more separated link</a></li>-->
                 <!--</ul>-->
 
-            <!--</li>-->
+                <!--</li>-->
+
+            </div>
 
         </div>
 
-    </div>
+    </nav>
 
-</nav>
+    <!-- TOP DIV -->
+    <!-- container-fluid is a class in bootstrap, simplyBg is a class name to be used in CSS, text-center is also a class in bootstrap -->
+    <div class="container-fluid bg1 text-center">
 
-<!-- TOP DIV -->
-<!-- container-fluid is a class in bootstrap, simplyBg is a class name to be used in CSS, text-center is also a class in bootstrap -->
-<div class="container-fluid bg1 text-center">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h1>Are You Bored?</h1>
 
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <h1>Are You Bored?</h1>
-
-            <p id="name" class="lead"></p>
-            <button type="button" id="btnSearch" value="Search" onclick="GetToDo(); randomize();" class="btn btn-lg btn-warning-outline" href="#">Find Something To Do ...</button>
+                <p id="name" class="lead"></p>
+                <button type="button" id="btnSearch" value="Search" onclick="GetToDo(); randomize();"
+                        class="btn btn-lg btn-warning-outline" href="#">Find Something To Do ...
+                </button>
+            </div>
         </div>
+
+        <!--<h3 class="margin">Who Am I?</h3>-->
+        <!--&lt;!&ndash; img-circle class exists in bootstrap &ndash;&gt;-->
+        <!--<img src="hiker.jpg" class="img-responsive img-circle margin" style="display:inline" alt="Hiker">-->
+        <!--<h3 class="margin">I'm a hiker.</h3>-->
+
     </div>
 
-    <!--<h3 class="margin">Who Am I?</h3>-->
-    <!--&lt;!&ndash; img-circle class exists in bootstrap &ndash;&gt;-->
-    <!--<img src="hiker.jpg" class="img-responsive img-circle margin" style="display:inline" alt="Hiker">-->
-    <!--<h3 class="margin">I'm a hiker.</h3>-->
+    <!-- BAR 1 -->
+    <hr id="bar1"/>
 
-</div>
-
-<!-- BAR 1 -->
-<hr id="bar1"/>
-
-<!-- MIDDLE DIV -->
-<div class="container-fluid bg2 text-center">
+    <!-- MIDDLE DIV -->
+    <div class="container-fluid bg2 text-center">
         <div id="message" class="text-center" href="#"></div>
-</div>
-
-<!-- BAR 2 -->
-<hr id="bar2"/>
-
-<!-- BOTTOM DIV -->
-<div class="container-fluid bg3 text-center">
-
-    <!-- ROW DIV -->
-    <div class="row">
-
-        <!-- COLUMN 1 -->
-        <div class="col-sm-4">
-            <p class="p3">COL 1</p>
-
-        </div>
-
-        <!-- COLUMN 2 -->
-        <div class="col-sm-4">
-            <p class="p3">COL 2</p>
-
-        </div>
-
-        <!-- COLUMN 3 -->
-        <div class="col-sm-4">
-            <p class="p3">COL 3</p>
-
-        </div>
-        <!-- END ROW -->
     </div>
 
-    <!-- END BOTTOM DIV -->
-</div>
+    <!-- BAR 2 -->
+    <hr id="bar2"/>
 
-<!-- My javascript code -->
-<script src="js/ToDoMethods.js"></script>
-<script src="js/ToDoData.js"></script>
+    <div id="map"></div>
+
+    <!-- BOTTOM DIV -->
+    <div class="container-fluid bg3 text-center">
+
+        <!-- ROW DIV -->
+        <div class="row">
+
+            <!-- COLUMN 1 -->
+            <div class="col-sm-4">
+                <p class="p3">COL 1</p>
+
+            </div>
+
+            <!-- COLUMN 2 -->
+            <div class="col-sm-4">
+                <p class="p3">COL 2</p>
+
+            </div>
+
+            <!-- COLUMN 3 -->
+            <div class="col-sm-4">
+                <p class="p3">COL 3</p>
+
+            </div>
+            <!-- END ROW -->
+        </div>
+
+        <!-- END BOTTOM DIV -->
+    </div>
+
+    <script>
+
+        $('document').ready(function () {
+            google.maps.event.addDomListener(window, "load", initMap);
+        });
+
+        // Run the initialize function when the window has finished loading.
+        //
+        //    google.maps.event.addDomListener(window, "load", initialize);
+    </script>
+
+    <!-- My javascript code -->
+    <script src="js/ToDoMethods.js"></script>
+    <script src="js/ToDoData.js"></script>
 
 </body>
 
 <!-- FOOTER -->
-<footer class="container-fluid bg4 text-center">
-    <p>Bootstrap Theme Made By Margaret Elkins with help from <a href="http://www.w3schools.com">www.w3schools.com</a></p>
-</footer>
+<!--<footer class="container-fluid bg4 text-center">-->
+<!--<p>Bootstrap Theme Made By Margaret Elkins with help from <a href="http://www.w3schools.com">www.w3schools.com</a></p>-->
+<!--</footer>-->
 </html>
