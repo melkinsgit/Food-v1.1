@@ -1,6 +1,6 @@
 var randomActivity;  // global to script file for access in GetFood and event handler for #message click
-
-var likesArray = ['thingsToDo', 'thingsToSee', 'thingsToEat'];
+var currIndex;
+var likesArray = ['doThingsDropDown', 'seeThingsDropDown', 'eatThingsDropDown'];
 
 //Acts as our class definition - defines a constructor
 var message = function(msg, likeArType) {
@@ -21,12 +21,14 @@ var art = new message("see some art", likesArray[1]);
 var kid = new message("take a kid somewhere", likesArray[0]);
 var imax = new message("watch an IMAX movie", likesArray[1]);
 
-function GetFood()
-{
-	// Kweku used an array for the food options, so I did the same for entertainment options
-	var toDoArray = [classical, dessert, zoo, aboretum, conservatory, blowOut, massage, hike, art, kid, imax];
+// Kweku used an array for the food options, so I did the same for entertainment options, but I turned them into ojbects and took them out of the GetToDo method
+var toDoArray = [classical, dessert, zoo, aboretum, conservatory, blowOut, massage, hike, art, kid, imax];
 
-	randomActivity = toDoArray[Math.floor(Math.random() * toDoArray.length)].msgText;
+function GetToDo()
+{
+	// I turned the array of strings into an array of objects
+	currIndex = Math.floor(Math.random() * toDoArray.length)
+	randomActivity = toDoArray[currIndex].msgText;
 	//document.getElementById("message").innerHTML = random;
 	$('#message').text(randomActivity);  // I rewrote in jQuery
    
@@ -66,49 +68,60 @@ function getName(){
 
 $('#message').mousedown(function() {
 
-	//addToSubMenu();
+	console.log(toDoArray[currIndex]);
 
-	// get the things to do dropdown menu header li tag var
-	var thingsToDo = document.getElementById('thingsToDo');
+	addToSubMenu(toDoArray[currIndex]);
 
-	// get the things to do dropdown ul tag var
-	var theDropDown = document.getElementById('doThingsDropDown');
-	//var theDropDownfn = findObjectById(document, 'doThingsDropDown');
-
-	console.log ('the var ' + theDropDown);
-
-	// create a new li tag var that will go under dropdown ul var
-	var newThingListItem = document.createElement('li');
-
-	// get the text of the users choice var
-	var currentIdea = document.getElementById('message').innerHTML;
-	console.log('the current idea is ' + currentIdea);
-
-	// create a new a tag var and give an href val of #, to show it's clickable
-	var newAttribute = document.createElement('a');
-	newAttribute.href = '#';
-	// put the users choice text into the a tag
-	newAttribute.innerHTML = currentIdea;
-
-	// add the a tag to the new li and the new li to the ul dropdown menu
-	newThingListItem.appendChild(newAttribute);
-	theDropDown.appendChild(newThingListItem);
+	//// get the things to do dropdown menu header li tag var
+	//var thingsToDo = document.getElementById('thingsToDo');
+    //
+	//// get the things to do dropdown ul tag var
+	//var theDropDown = document.getElementById('doThingsDropDown');
+	////var theDropDownfn = findObjectById(document, 'doThingsDropDown');
+    //
+	//console.log ('the var ' + theDropDown);
+    //
+	//// create a new li tag var that will go under dropdown ul var
+	//var newThingListItem = document.createElement('li');
+    //
+	//// get the text of the users choice var
+	//var currentIdea = document.getElementById('message').innerHTML;
+	//console.log('the current idea is ' + currentIdea);
+    //
+	//// create a new a tag var and give an href val of #, to show it's clickable
+	//var newAttribute = document.createElement('a');
+	//newAttribute.href = '#';
+	//// put the users choice text into the a tag
+	//newAttribute.innerHTML = currentIdea;
+    //
+	//// add the a tag to the new li and the new li to the ul dropdown menu
+	//newThingListItem.appendChild(newAttribute);
+	//theDropDown.appendChild(newThingListItem);
 
 });
 
-function addToSubMenu () {
+function addToSubMenu (msgObject) {
+
+	var currentIdea = msgObject.msgText;
+	console.log('the current idea is ' + currentIdea);
 
 	// get the things to do dropdown menu header li tag var
-	var thingsToDo = document.getElementById('thingsToDo');
+	//var thingsToDo = document.getElementById('thingsToDo');
 
 	// get the things to do dropdown ul tag var
-	var theDropDown = document.getElementById('thingsDropDown');
+	//var theDropDown = document.getElementById('thingsDropDown');
+	var theDropDown = document.getElementById(msgObject.type);
+	console.log('the dropdown node is ' + theDropDown);
+
+	var theMenu = theDropDown.parentNode;
+	console.log ('the menu node is '+ theMenu);
 
 	// create a new li tag var that will go under dropdown ul var
-	var newThingListItem = document.createElement('li');
+	//var newThingListItem = document.createElement('li');
+	var newListItem = document.createElement('li');
 
 	// get the text of the users choice var
-	var currentIdea = document.getElementById('message').innerHTML;
+	//var currentIdea = document.getElementById(msgObject.msgText);
 	console.log('the current idea is ' + currentIdea);
 
 	// create a new a tag var and give an href val of #, to show it's clickable
@@ -118,8 +131,8 @@ function addToSubMenu () {
 	newAttribute.innerHTML = currentIdea;
 
 	// add the a tag to the new li and the new li to the ul dropdown menu
-	newThingListItem.appendChild(newAttribute);
-	theDropDown.appendChild(newThingListItem);
+	newListItem.appendChild(newAttribute);
+	theDropDown.appendChild(newListItem);
 
 }
 // from stackoverflow: http://stackoverflow.com/questions/12899609/how-to-add-an-object-to-a-nested-javascript-object-using-a-parent-id
