@@ -1,42 +1,65 @@
-function initMap() {
+var map;
+var infowindow;
 
-	var mapDiv = document.getElementById("map");
+$('document').ready(function () {
+	//google.maps.event.addDomListener(window, "load", function () {
+	//	initMap("map1");
+	//});
+	//google.maps.event.addDomListener(window, "load", function () {
+	//	initMap("map2");
+	//});
+	//google.maps.event.addDomListener(window, "load", function () {
+	//	initMap("map3");
+	//});
+});
 
-	var pyrmont = new google.maps.LatLng(-33.8665, 151.1956);
+// initMap, callback and createMarker from:  https://developers.google.com/maps/documentation/javascript/examples/place-search
+function initMap(mapToAdd, searchPhrase) {
+
+	var mapDiv = document.getElementById(mapToAdd);
+
+	var minneapolis = new google.maps.LatLng(44.9778, -93.2650);
 
 	var mapOptions = {
-		center: pyrmont,
+		center: minneapolis,
 		zoom: 15,
-		mapTypeId: google.maps.MapTypeId.ROADMAP
-		//scrollwheel: false
+		mapTypeId: google.maps.MapTypeId.ROADMAP,
+		scrollwheel: false
 	};
 
-	var map = new google.maps.Map(mapDiv, mapOptions);
+	map = new google.maps.Map(mapDiv, mapOptions);
 
-	// Specify location, radius and place types for your Places API search.
-	//var request = {
-	//    location: pyrmont,
-	//    radius: '500',
-	//    types: ['dance class']
-	//};
+	infowindow = new google.maps.InfoWindow();
 
-	// Create the PlaceService and send the request.
-	// Handle the callback with an anonymous function.
-	//var service = new google.maps.places.PlacesService(map);
-	//service.nearbySearch(request, function(results, status) {
-	//    if (status == google.maps.places.PlacesServiceStatus.OK) {
-	//        for (var i = 0; i < results.length; i++) {
-	//            var place = results[i];
-	//            // If the request succeeds, draw the place location on
-	//            // the map as a marker, and register an event to handle a
-	//            // click on the marker.
-	//            var marker = new google.maps.Marker({
-	//                map: map,
-	//                position: place.geometry.location
-	//            });
-	//        }
-	//    }
-	//});
+	var service = new google.maps.places.PlacesService(map);
+
+	service.nearbySearch({
+		location: minneapolis,
+		radius: 500,
+		//types: ['store']
+		name: searchPhrase
+	}, callback);
+}
+
+function callback(results, status) {
+	if (status === google.maps.places.PlacesServiceStatus.OK) {
+		for (var i = 0; i < results.length; i++) {
+			createMarker(results[i]);
+		}
+	}
+}
+
+function createMarker(place) {
+	var placeLoc = place.geometry.location;
+	var marker = new google.maps.Marker({
+		map: map,
+		position: place.geometry.location
+	});
+
+	google.maps.event.addListener(marker, 'click', function() {
+		infowindow.setContent(place.name);
+		infowindow.open(map, this);
+	});
 }
 
 //google.maps.event.addDomListener(window, 'load', initialize);
@@ -79,7 +102,10 @@ function getName(){
 $('#message').mousedown(function() {
 
 	addToSubMenu(toDoArray[currIndex]);
-	getMap(toDoArray[currIndex]);
+
+	addRow(toDoArray[currIndex]);
+
+	initMap(toDoArray[currIndex].msgText, toDoArray[currIndex].searchFor);
 
 });
 
@@ -108,9 +134,32 @@ function addToSubMenu (msgObject) {
 	theDropDown.appendChild(newListItem);
 }
 
-function getMap (msgObject) {
+function makeMap (msgObject) {
 
-	console.log('the ojbect is ' + msgObject);
 
-	//initialize();
+}
+
+function addRow (msgObject) {
+
+	var rowBody = document.getElementById('addRows');
+
+	var tableRow = document.createElement('tr');
+	var rowStart = document.createElement('th');
+	//rowStart.scope = 'row' + msgObject.description;
+	var val1 = document.createElement('td');
+	var mapVal = document.createElement('td');
+	var mapDiv = document.createElement('div');
+	mapDiv.id = msgObject.msgText;
+	mapDiv.className = 'map';
+
+	val1.innerHTML = msgObject.msgText;
+	tableRow.appendChild(rowStart);
+	tableRow.appendChild(val1);
+
+	mapVal.appendChild(mapDiv);
+	tableRow.appendChild(mapVal);
+
+
+	rowBody.appendChild(tableRow);
+
 }

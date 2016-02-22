@@ -73,3 +73,15 @@ p {
 #bar1, #bar2 {
     height: 10px;
 }
+
+.map {
+
+    width: 500px;
+    height: 400px;
+    margin: 5px;
+}
+
+table, .table {
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
