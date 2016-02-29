@@ -2,15 +2,7 @@ var map;
 var infowindow;
 
 $('document').ready(function () {
-	//google.maps.event.addDomListener(window, "load", function () {
-	//	initMap("map1");
-	//});
-	//google.maps.event.addDomListener(window, "load", function () {
-	//	initMap("map2");
-	//});
-	//google.maps.event.addDomListener(window, "load", function () {
-	//	initMap("map3");
-	//});
+
 });
 
 // initMap, callback and createMarker from:  https://developers.google.com/maps/documentation/javascript/examples/place-search
@@ -22,27 +14,31 @@ function initMap(mapToAdd, searchPhrase) {
 
 	var mapOptions = {
 		center: minneapolis,
-		zoom: 15,
+		zoom: 10,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 		scrollwheel: false
 	};
 
 	map = new google.maps.Map(mapDiv, mapOptions);
 
-	infowindow = new google.maps.InfoWindow();
+	infowindow = new google.maps.InfoWindow();  // this is where I will get the DATA FROM THE MAP ??
+	getJsonData('data.json');
 
 	var service = new google.maps.places.PlacesService(map);
 
+	//console.log('the search phrase is ' + searchPhrase);
 	service.nearbySearch({
 		location: minneapolis,
-		radius: 500,
+		radius: 50000,
 		//types: ['store']
-		name: searchPhrase
+		keyword: searchPhrase,
+		rankby: 'prominence'
 	}, callback);
 }
 
 function callback(results, status) {
 	if (status === google.maps.places.PlacesServiceStatus.OK) {
+		console.log('results length is ' + results.length);
 		for (var i = 0; i < results.length; i++) {
 			createMarker(results[i]);
 		}
@@ -134,11 +130,6 @@ function addToSubMenu (msgObject) {
 	theDropDown.appendChild(newListItem);
 }
 
-function makeMap (msgObject) {
-
-
-}
-
 function addRow (msgObject) {
 
 	var rowBody = document.getElementById('addRows');
@@ -161,5 +152,11 @@ function addRow (msgObject) {
 
 
 	rowBody.appendChild(tableRow);
+
+}
+
+function getJsonData (filename) {
+
+	map.data.loadGeoJson(filename);
 
 }

@@ -10,6 +10,10 @@ p {
     font-size: 16px;
 }
 
+h1 {
+    height: 25px;
+}
+
 .bg1 {
     background-color: #82D8ff;
     color: orange;
@@ -79,9 +83,14 @@ p {
     width: 500px;
     height: 400px;
     margin: 5px;
+    color: #000000;
 }
 
 table, .table {
     padding-top: 70px;
     padding-bottom: 70px;
+}
+
+td {
+    color: #a99b7a;
 }
