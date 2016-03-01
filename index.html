@@ -1,10 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- This file was based on my Simply Me project (based on W3Schools tutorial) with Find Something To Do button and methods called from button originally from Kweku's project, a lot has been reworked (see js files)-->
 <head>
+    <title>Find Somthing Fun Bootstrap</title>
     <meta charset="UTF-8">
-    <title>hello world margaret</title>
+
+    <!-- viewport metatag enables rendering and touch zooming for mobile -->
+    <!--<meta name="viewport" content="width=divide-width, initial-scale=1">-->
+
+    <!-- jQuery and bootstrap and google api fonts -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link href="http://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <!-- google maps api with my dev key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZILioas3HVVdRo_R5GTja1ornfXt4zl8&libraries=places"></script>
+
+    <!-- My custom CSS -->
+    <link rel="stylesheet" type="text/css" href="FunThingsToDoCSS.css">
+
+    <!-- My javascript code HAS TO BE AT END OF BODY BECAUSE THE IS NO READY FN -->
+    <!--<script src="js/ToDoMethods.js"></script>-->
 </head>
+
 <body>
 
+<!-- NAV BAR -->
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">WHAT I LIKE ...</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" id="thingsToDo">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">things to do</a>
+                    <ul class="dropdown-menu" id="doThingsDropDown">
+                    </ul>
+                </li>
+                <li id="thingsToSee"><a href="#" class="dropdown-toggle" data-toggle="dropdown">things to see</a>
+                    <ul class="dropdown-menu" id="seeThingsDropDown">
+                    </ul>
+                </li>
+                <li id="thingsToEat"><a href="#" class="dropdown-toggle" data-toggle="dropdown">things to eat</a>
+                    <ul class="dropdown-menu" id="eatThingsDropDown">
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- TOP DIV -->
+<!-- container-fluid is a class in bootstrap, simplyBg is a class name to be used in CSS, text-center is also a class in bootstrap -->
+<div class="container-fluid bg1 text-center">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1>Are You Bored?</h1>
+            <p id="name" class="lead"></p>
+            <button type="button" id="btnSearch" value="Search" onclick="GetToDo(); randomize();"
+                    class="btn btn-lg btn-warning-outline" href="#">Find Something To Do ...
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- BAR 1 -->
+<hr id="bar1"/>
+
+<!-- MIDDLE DIV where the messages will be -->
+<div class="container-fluid bg2 text-center">
+    <div id="message" class="text-center" href="#"></div>
+</div>
+
+<!-- BAR 2 -->
+<hr id="bar2"/>
+
+<!-- TABLE -->
+<table class="table bg3">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Fun Thing</th>
+        <th>Where To Find It</th>
+    </tr>
+    </thead>
+    <tbody id="addRows">
+
+    </tbody>
+</table>
+
+<!-- My javascript code -->
+<script src="js/ToDoMethods.js"></script>
+<script src="js/ToDoData.js"></script>
+
 </body>
+
+<!--FOOTER-->
+<footer class="container-fluid bg4 text-center">
+    <p>Created by Margaret Elkins for your enjoyment.</p>
+</footer>
 </html>
