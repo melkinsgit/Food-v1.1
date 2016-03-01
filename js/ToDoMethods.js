@@ -5,10 +5,26 @@ $('document').ready(function () {
 
 });
 
+$('#message').mousedown(function() {
+	//console.log('just clicked down on the message and adding to allIdeas ' + toDoArray[currIndex].msgText);
+	//allIdeas.push(toDoArray[currIndex].msgText);
+	//console.log('and the array of ideas is ' + allIdeas);
+	console.log('adding this to all Ideas array ' + toDoArray[currIndex].msgText);
+	addToSubMenu(toDoArray[currIndex]);
+
+	addRow(toDoArray[currIndex]);
+
+	initMap(toDoArray[currIndex].msgText, toDoArray[currIndex].searchFor);
+
+});
+
 // initMap, callback and createMarker from:  https://developers.google.com/maps/documentation/javascript/examples/place-search
 function initMap(mapToAdd, searchPhrase) {
 
-	var mapDiv = document.getElementById(mapToAdd);
+	var mapDivs = document.getElementsByClassName(mapToAdd);
+	console.log(mapDivs[mapDivs.length - 1]);
+	var mapDiv = mapDivs[mapDivs.length - 1];
+	console.log('in init map and params are ' + mapToAdd + ' ' + searchPhrase);
 
 	var minneapolis = new google.maps.LatLng(44.9778, -93.2650);
 
@@ -22,24 +38,22 @@ function initMap(mapToAdd, searchPhrase) {
 	map = new google.maps.Map(mapDiv, mapOptions);
 
 	infowindow = new google.maps.InfoWindow();  // this is where I will get the DATA FROM THE MAP ??
-	getJsonData('data.json');
+	getJsonData('data.json');  // DOESN'T WORK YET
 
 	var service = new google.maps.places.PlacesService(map);
 
-	//console.log('the search phrase is ' + searchPhrase);
 	service.nearbySearch({
 		location: minneapolis,
 		radius: 50000,
-		//types: ['store']
 		keyword: searchPhrase,
 		rankby: 'prominence'
 	}, callback);
 }
 
-function callback(results, status) {
-	if (status === google.maps.places.PlacesServiceStatus.OK) {
-		console.log('results length is ' + results.length);
+function callback(results, status) {  // where results is an array of marker objects that are the result of the search
+	if (status === google.maps.places.PlacesServiceStatus.OK) {  // when the search is successful (?)
 		for (var i = 0; i < results.length; i++) {
+			//console.log(results[i]);
 			createMarker(results[i]);
 		}
 	}
@@ -54,6 +68,7 @@ function createMarker(place) {
 
 	google.maps.event.addListener(marker, 'click', function() {
 		infowindow.setContent(place.name);
+		console.log('adding listener to mark where this is ' + this);
 		infowindow.open(map, this);
 	});
 }
@@ -95,16 +110,19 @@ function getName(){
 	
 }
 
-$('#message').mousedown(function() {
+function getMsgObj(ideaName) {
+	//console.log('in get msg obj for ' + ideaName + ' where len of all ideas ' + allIdeas.length);
+	//console.log('the array of ideas is ' + allIdeas);
+	for (var i = 0; i < toDoArray.length; i++){
+		if (toDoArray[i].msgText === ideaName){
+			console.log('calling addRow of ' + toDoArray[i].msgText);
+			addRow(toDoArray[i]);
+			console.log('calling initMap of ' + toDoArray[i].msgText + ' and ' + toDoArray[i].searchFor);
+			initMap(toDoArray[i].msgText, toDoArray[i].searchFor);
+		}
+	}
 
-	addToSubMenu(toDoArray[currIndex]);
-
-	addRow(toDoArray[currIndex]);
-
-	initMap(toDoArray[currIndex].msgText, toDoArray[currIndex].searchFor);
-
-});
-
+}
 function addToSubMenu (msgObject) {
 
 	// get the text of the users choice var
@@ -128,7 +146,22 @@ function addToSubMenu (msgObject) {
 	// add the a tag to the new li and the new li to the ul dropdown menu
 	newListItem.appendChild(newAttribute);
 	theDropDown.appendChild(newListItem);
+
+	newListItem.addEventListener('click', function () {
+		var aItem = this.getElementsByTagName('a');
+
+		// got the var arrayVar = [].slice.call(HTMLCollection) from stackoverflow: http://stackoverflow.com/questions/222841/most-efficient-way-to-convert-an-htmlcollection-to-an-array
+		var aArr = [].slice.call(aItem);
+		getMsgObj(aArr[0].innerHTML);
+		}
+	);
+
+	//$('.newListItem:last-child').on('click', function () {
+	//	var thisObj = $(this);
+	//	console.log('this object is ' + thisObj);
+	//});
 }
+
 
 function addRow (msgObject) {
 
@@ -137,11 +170,15 @@ function addRow (msgObject) {
 	var tableRow = document.createElement('tr');
 	var rowStart = document.createElement('th');
 	//rowStart.scope = 'row' + msgObject.description;
+
 	var val1 = document.createElement('td');
+	//addDropDownToRow (val1);
 	var mapVal = document.createElement('td');
 	var mapDiv = document.createElement('div');
-	mapDiv.id = msgObject.msgText;
-	mapDiv.className = 'map';
+	//mapDiv.id = msgObject.msgText;
+	console.log('mapDiv.id in add row is ' + msgObject.msgText);
+	mapDiv.className = 'map ' + msgObject.msgText;
+	console.log('new class for map is ' + mapDiv.className);
 
 	val1.innerHTML = msgObject.msgText;
 	tableRow.appendChild(rowStart);
@@ -150,9 +187,7 @@ function addRow (msgObject) {
 	mapVal.appendChild(mapDiv);
 	tableRow.appendChild(mapVal);
 
-
 	rowBody.appendChild(tableRow);
-
 }
 
 function getJsonData (filename) {
