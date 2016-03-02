@@ -71,6 +71,7 @@ function createMarker(place) {
 	});
 
 	google.maps.event.addListener(marker, 'click', function() {
+		console.log(place + ' ' + place.vicinity + ' ' + place.geometry.location);
 		infowindow.setContent(place.name); // name is one of the place properties
 		infowindow.open(map, this);  // open this MARKER????? WINDOW???? on the map
 	});
