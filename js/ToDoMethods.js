@@ -5,7 +5,7 @@ $('document').ready(function () {
 	getName();
 });
 
-// when the user clicks/chooses a phrase describing something to do, which is in a div with the id message, three things happen: 1) the to do object is added to the appropriate sub menu in the nav bar; 2) another row is added to the bottom of the webpage with the to do and 3) a map of where to find it is also added to the row
+// when the user clicks/chooses a phrase describing something to do, which is in a d iv with the id message, three things happen: 1) the to do object is added to the appropriate sub menu in the nav bar; 2) another row is added to the bottom of the webpage with the to do and 3) a map of where to find it is also added to the row
 $('#message').mousedown(function() {
 
 	addToSubMenu(toDoArray[currIndex]);
