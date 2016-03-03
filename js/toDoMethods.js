@@ -24,7 +24,6 @@ function initMap(mapToAdd, searchPhrase) {
 	// find all the div elements with the class name of the current message text, there may be more than one if the map is being added from a click to the submenu rather than a click to the message, so we take the most recent one, which is the last one in the array of elements returned to the value mapDivs
 	var mapDivs = document.getElementsByClassName(mapToAdd);
 	// the last element in mapDivs will be the most recently created div
-	//var mapDiv = mapDivs[mapDivs.length - 1];
 	var mapDiv = mapDivs[0];
 
 	// this will be the center location
@@ -80,7 +79,6 @@ function addDetailsToRow(infoObj) {
 
 // creates a marker for and adds an event listener, the info window with place name and other data will show when marker is clicked
 function createMarker(place) {
-	console.log('in create marker');
 	var marker = new google.maps.Marker({
 		map: map,
 		position: place.geometry.location
