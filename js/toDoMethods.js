@@ -24,7 +24,6 @@ function initMap(mapToAdd, searchPhrase) {
 	// find all the div elements with the class name of the current message text, there may be more than one if the map is being added from a click to the submenu rather than a click to the message, so we take the most recent one, which is the last one in the array of elements returned to the value mapDivs
 	var mapDivs = document.getElementsByClassName(mapToAdd);
 	// the last element in mapDivs will be the most recently created div
-	console.log('the length of the divs with maps is ' + mapDivs.length);
 	//var mapDiv = mapDivs[mapDivs.length - 1];
 	var mapDiv = mapDivs[0];
 
