@@ -1,13 +1,17 @@
 var map;
 var infowindow;
+var service;
+var currIndex;
+var placesIPicked = [];
 
 $('document').ready(function () {
-	getName();
+	//getName();
 });
 
 // when the user clicks/chooses a phrase describing something to do, which is in a d iv with the id message, three things happen: 1) the to do object is added to the appropriate sub menu in the nav bar; 2) another row is added to the bottom of the webpage with the to do and 3) a map of where to find it is also added to the row
 $('#message').mousedown(function() {
 
+	placesIPicked.push(toDoArray[currIndex]);
 	addToSubMenu(toDoArray[currIndex]);
 	addRow(toDoArray[currIndex]);
 	initMap(toDoArray[currIndex].msgText, toDoArray[currIndex].searchFor);
@@ -20,7 +24,9 @@ function initMap(mapToAdd, searchPhrase) {
 	// find all the div elements with the class name of the current message text, there may be more than one if the map is being added from a click to the submenu rather than a click to the message, so we take the most recent one, which is the last one in the array of elements returned to the value mapDivs
 	var mapDivs = document.getElementsByClassName(mapToAdd);
 	// the last element in mapDivs will be the most recently created div
-	var mapDiv = mapDivs[mapDivs.length - 1];
+	console.log('the length of the divs with maps is ' + mapDivs.length);
+	//var mapDiv = mapDivs[mapDivs.length - 1];
+	var mapDiv = mapDivs[0];
 
 	// this will be the center location
 	var minneapolis = new google.maps.LatLng(44.9778, -93.2650);
@@ -36,12 +42,10 @@ function initMap(mapToAdd, searchPhrase) {
 	// make the map - the div created for it is big enough to hold it based on CSS specs for 'map' class
 	map = new google.maps.Map(mapDiv, mapOptions);
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	infowindow = new google.maps.InfoWindow();  // this is where I will get the DATA FROM THE MAP ??
-	getJsonData('data.json');  // DOESN'T WORK YET
+	infowindow = new google.maps.InfoWindow();  // this is where I will get the DATA FROM THE MAP
 
 	// new places feature of google maps that allows search
-	var service = new google.maps.places.PlacesService(map);
+	service = new google.maps.places.PlacesService(map);
 
 	// search in 50000 meters from minneapolis (same center as defined above)
 	service.nearbySearch({
@@ -56,25 +60,49 @@ function initMap(mapToAdd, searchPhrase) {
 
 // take the results and run through them creating a marker for each one
 function callback(results, status) {  // where results is an array of marker objects that are the result of the search
-	if (status === google.maps.places.PlacesServiceStatus.OK) {  // when the search is successful (?)
+	if (status === google.maps.places.PlacesServiceStatus.OK) {  // when the search is successful
 		for (var i = 0; i < results.length; i++) {
 			createMarker(results[i]);
 		}
 	}
 }
 
-// creates a marker for and adds an event listener, the info window with place name will show when marker is clicked
+function addDetailsToRow(infoObj) {
+	var currRow = document.getElementById(toDoArray[currIndex].msgText);
+	var newPar = document.createElement('p');
+	newPar.innerHTML = infoObj.name + '<br />' + infoObj.formatted_address + '<br />' + infoObj.formatted_phone_number;
+	var newWebTag = document.createElement('a');
+	newWebTag.href = infoObj.website;
+	newWebTag.innerHTML = infoObj.website;
+	newWebTag.target = "_blank";
+	currRow.appendChild(newPar);
+	currRow.appendChild(newWebTag);
+}
+
+// creates a marker for and adds an event listener, the info window with place name and other data will show when marker is clicked
 function createMarker(place) {
+	console.log('in create marker');
 	var marker = new google.maps.Marker({
 		map: map,
 		position: place.geometry.location
 	});
 
-	google.maps.event.addListener(marker, 'click', function() {
-		console.log(place + ' ' + place.vicinity + ' ' + place.geometry.location);
-		infowindow.setContent(place.name); // name is one of the place properties
-		infowindow.open(map, this);  // open this MARKER????? WINDOW???? on the map
+	// got the basics for the following from StackOverflow: http://stackoverflow.com/questions/9520808/google-places-api-places-detail-request-undefined; I just had to make my service var global; I added the addDetailsToRow function
+	var request = { reference: place.reference };
+	service.getDetails(request, function(details) {
+		google.maps.event.addListener(marker, 'click', function() {
+			if(details) {
+				console.log('there are marker details like ' + details.name);
+				infowindow.setContent(details.name + "<br />" + details.formatted_address + "<br />" + details.website + "<br />" + details.rating + "<br />" + details.formatted_phone_number);
+				addDetailsToRow(details);
+			}
+			else {
+				infowindow.setContent('Sorry, no information available.')
+			}
+			infowindow.open(map, this);
+		});
 	});
+
 }
 
 // This is Kweku's function. I changed what was originally an array of strings into an array of objects - matching my data
@@ -137,9 +165,9 @@ function addToSubMenu (msgObject) {
 	// put the users choice text into the a tag
 	newAttribute.innerHTML = currentIdea;
 
-	// add the a tag to the new li and the new li to the ul dropdown menu
+	// add the a tag to the new li and the new li to the ul dropdown menu; got the insertBefore method info from W3: http://www.w3schools.com/jsref/met_node_insertbefore.asp
 	newListItem.appendChild(newAttribute);
-	theDropDown.appendChild(newListItem);
+	theDropDown.insertBefore(newListItem, theDropDown.childNodes[0]);
 
 	// add an event listener to the new submenu item that will call getMsgObj when the item is clicked in the submenu
 	newListItem.addEventListener('click', function () {
@@ -148,7 +176,6 @@ function addToSubMenu (msgObject) {
 		// got the var arrayVar = [].slice.call(HTMLCollection) from stackoverflow: http://stackoverflow.com/questions/222841/most-efficient-way-to-convert-an-htmlcollection-to-an-array
 		var aArr = [].slice.call(aItem);
 		getMsgObj(aArr[0].innerHTML); // there is only one
-		///////// remove event listener ???????????///////////////////
 		}
 	);
 }
@@ -157,39 +184,27 @@ function addToSubMenu (msgObject) {
 function addRow (msgObject) {
 
 	// get the addRows element which is table body
-	var rowBody = document.getElementById('addRows');
+	var tableBody = document.getElementById('addRows');
+	// insert a row at the head, got insertRow and insertCell from: http://www.w3schools.com/jsref/met_table_insertrow.asp
+	var newRow = tableBody.insertRow(0);
 
-	//create a table row and a header that will be empty
-	var tableRow = document.createElement('tr');
-	var rowStart = document.createElement('th');
+	// create all three data cells
+	var noVal = newRow.insertCell(0);
+	var val1 = newRow.insertCell(1);
+	var mapVal = newRow.insertCell(2);
+	val1.id = msgObject.msgText;
 
-	// create a data cell for the name of the object message
-	var val1 = document.createElement('td');
-	// create a data cell for the map
-	var mapVal = document.createElement('td');
 	// create a div to be included in the data cell for the map
 	var mapDiv = document.createElement('div');
 	// give the mapDiv a class name that includes map for CSS formatting and the ojbect message for map-making later
 	mapDiv.className = 'map ' + msgObject.msgText;
+	console.log('the mapDiv class name is now ' + mapDiv.className);
 
 	// give the val1 cell the content of the object message
 	val1.innerHTML = msgObject.msgText;
 
-	// add the empty start row cell and the val1 cell with the message to the new table row
-	tableRow.appendChild(rowStart);
-	tableRow.appendChild(val1);
-
 	// add the mapDiv to the mapVal cell
 	mapVal.appendChild(mapDiv);
-	// add the map cell to the new table row
-	tableRow.appendChild(mapVal);
-
-	// now add the complete table row to the row body
-	rowBody.appendChild(tableRow);
-}
-
-function getJsonData (filename) {
-
-	map.data.loadGeoJson(filename);
+	console.log('should have just appended the map div to the map cell');
 
 }
