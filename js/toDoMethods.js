@@ -197,13 +197,11 @@ function addRow (msgObject) {
 	var mapDiv = document.createElement('div');
 	// give the mapDiv a class name that includes map for CSS formatting and the ojbect message for map-making later
 	mapDiv.className = 'map ' + msgObject.msgText;
-	console.log('the mapDiv class name is now ' + mapDiv.className);
 
 	// give the val1 cell the content of the object message
 	val1.innerHTML = msgObject.msgText;
 
 	// add the mapDiv to the mapVal cell
 	mapVal.appendChild(mapDiv);
-	console.log('should have just appended the map div to the map cell');
 
 }
