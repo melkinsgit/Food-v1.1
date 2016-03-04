@@ -17,8 +17,6 @@ $('#message').mousedown(function() {
 		addRow(toDoArray[currIndex]);
 		initMap(toDoArray[currIndex].msgText, toDoArray[currIndex].searchFor);
 	}
-
-
 });
 
 // initMap, callback and createMarker from:  https://developers.google.com/maps/documentation/javascript/examples/place-search; I added the parameters so that the map is created for a particular to do item; the to do object has a searchPhrase property for the search feature of google maps; I also added comments
@@ -42,6 +40,10 @@ function initMap(mapToAdd, searchPhrase) {
 
 	// make the map - the div created for it is big enough to hold it based on CSS specs for 'map' class
 	map = new google.maps.Map(mapDiv, mapOptions);
+
+	// Got the idea of creating a property for my map from StackOverflow: http://stackoverflow.com/questions/10818910/how-to-get-the-google-map-linked-to-a-div
+	var mapOnDiv = document.getElementsByClassName(toDoArray[currIndex].msgText);
+	mapOnDiv[0].gMap = map;
 
 	infowindow = new google.maps.InfoWindow();  // this is where I will get the DATA FROM THE MAP
 
@@ -83,12 +85,9 @@ function addDetailsToRow(infoObj, currRow) {
 }
 
 // creates a marker for and adds an event listener, the info window with place name and other data will show when marker is clicked
-function getTableLoc(messageText) {
+function getTableLoc() {
 	var tdsArray = document.getElementsByTagName('td');
 	var tdsToTarget = [].slice.call(tdsArray);  // need to have submenu move thing to top of list;
-	//var thing = tdsToTarget[2];
-	//var message = (tdsToTarget[1].innerHTML);
-	//console.log(thing);
 	var tableRows = [];
 	tableRows[0] = tdsToTarget[1];
 	tableRows[1] = tdsToTarget[2];
@@ -102,10 +101,9 @@ function createMarker(place, markerArray) {
 	});
 	markerArray.push(marker);
 
-	var divObj = map.streetView.R;
-	var classToFind = divObj.className.substr(4);
-	var rowForOutput = getTableLoc(classToFind);
-	console.log(rowForOutput[1]);
+	//var divObj = map.streetView.R;
+	//var classToFind = divObj.className.substr(4);
+	var rowForOutput = getTableLoc();
 
 	// got the basics for the following from StackOverflow: http://stackoverflow.com/questions/9520808/google-places-api-places-detail-request-undefined; I just had to make my service var global; I added the addDetailsToRow function
 	var request = { reference: place.reference };
@@ -118,8 +116,11 @@ function createMarker(place, markerArray) {
 			else {
 				infowindow.setContent('Sorry, no information available.')
 			}
-
-			infowindow.open(map, this);
+			var myMapDiv = rowForOutput[1].getElementsByTagName('div');
+			var myMap = myMapDiv[0].gMap;
+			console.log(myMap);
+			console.log(myMapDiv[0]);
+			infowindow.open(myMap, this);
 		});
 	});
 
@@ -210,7 +211,7 @@ function addRow (msgObject) {
 	var newRow = tableBody.insertRow(0);
 
 	// create all three data cells
-	var noVal = newRow.insertCell(0);
+	newRow.insertCell(0);  // put in empty cell farthest to the left of table row
 	var val1 = newRow.insertCell(1);
 	var mapVal = newRow.insertCell(2);
 	val1.id = msgObject.msgText;
@@ -226,5 +227,4 @@ function addRow (msgObject) {
 
 	// add the mapDiv to the mapVal cell
 	mapVal.appendChild(mapDiv);
-
 }
