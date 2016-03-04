@@ -8,9 +8,15 @@ var randomActivity;
 
 var likesArray = ['doThingsDropDown', 'seeThingsDropDown', 'eatThingsDropDown'];
 
-var mapSearch = function (toDoToFind) {
-    this.findThis = toDoToFind;
-};
+//var mapSearch = function (toDoToFind) {
+//    this.findThis = toDoToFind;
+//};
+
+//
+//var marksListObj = function (mapMsg, marksArray){
+//    this.mapMsg = mapMsg;
+//    this.marksArray = marksArray;
+//}
 
 //Acts as our class definition - defines a constructor
 var message = function(msg, likeArType, searchFor) {
@@ -18,6 +24,7 @@ var message = function(msg, likeArType, searchFor) {
     this.description = "";
     this.type = likeArType;
     this.searchFor = searchFor;
+    this.marksArray = [];
 };
 
 var classical = new message("listen to classical", likesArray[0], 'classical music');

@@ -13,14 +13,11 @@ $('document').ready(function () {
 $('#message').mousedown(function() {
 	if (placesIPicked.indexOf(toDoArray[currIndex])) {
 		placesIPicked.push(toDoArray[currIndex]);
-		console.log(placesIPicked);
 		addToSubMenu(toDoArray[currIndex]);
 		addRow(toDoArray[currIndex]);
 		initMap(toDoArray[currIndex].msgText, toDoArray[currIndex].searchFor);
 	}
-	else {
-		console.log('it\'s already in the array');
-	}
+
 
 });
 
@@ -66,13 +63,15 @@ function initMap(mapToAdd, searchPhrase) {
 function callback(results, status) {  // where results is an array of marker objects that are the result of the search
 	if (status === google.maps.places.PlacesServiceStatus.OK) {  // when the search is successful
 		for (var i = 0; i < results.length; i++) {
-			createMarker(results[i]);
+			createMarker(results[i], toDoArray[currIndex].marksArray);
 		}
 	}
 }
 
-function addDetailsToRow(infoObj) {
-	var currRow = document.getElementById(toDoArray[currIndex].msgText);
+function addDetailsToRow(infoObj, currRow) {
+
+	//var currRow = document.getElementById(toDoArray[currIndex].msgText);
+	//var currRow2 = this.previousSibling.innerHTML;
 	var newPar = document.createElement('p');
 	newPar.innerHTML = infoObj.name + '<br />' + infoObj.formatted_address + '<br />' + infoObj.formatted_phone_number;
 	var newWebTag = document.createElement('a');
@@ -84,23 +83,42 @@ function addDetailsToRow(infoObj) {
 }
 
 // creates a marker for and adds an event listener, the info window with place name and other data will show when marker is clicked
-function createMarker(place) {
+function getTableLoc(messageText) {
+	var tdsArray = document.getElementsByTagName('td');
+	var tdsToTarget = [].slice.call(tdsArray);  // need to have submenu move thing to top of list;
+	//var thing = tdsToTarget[2];
+	//var message = (tdsToTarget[1].innerHTML);
+	//console.log(thing);
+	var tableRows = [];
+	tableRows[0] = tdsToTarget[1];
+	tableRows[1] = tdsToTarget[2];
+	return(tableRows);
+}
+
+function createMarker(place, markerArray) {
 	var marker = new google.maps.Marker({
 		map: map,
 		position: place.geometry.location
 	});
+	markerArray.push(marker);
+
+	var divObj = map.streetView.R;
+	var classToFind = divObj.className.substr(4);
+	var rowForOutput = getTableLoc(classToFind);
+	console.log(rowForOutput[1]);
 
 	// got the basics for the following from StackOverflow: http://stackoverflow.com/questions/9520808/google-places-api-places-detail-request-undefined; I just had to make my service var global; I added the addDetailsToRow function
 	var request = { reference: place.reference };
-	service.getDetails(request, function(details) {
+	service.getDetails(request, function(details) {  // get the data details from the marker
 		google.maps.event.addListener(marker, 'click', function() {
 			if(details) {
 				infowindow.setContent(details.name + "<br />" + details.formatted_address + "<br />" + details.website + "<br /> 5-point Rating: " + details.rating + "<br />" + details.formatted_phone_number);
-				addDetailsToRow(details);
+				addDetailsToRow(details, rowForOutput[0]);
 			}
 			else {
 				infowindow.setContent('Sorry, no information available.')
 			}
+
 			infowindow.open(map, this);
 		});
 	});
@@ -143,18 +161,13 @@ function getName(){
 // this function takes the message string name and finds the object it belongs to among the objects in the to do Array; when the match is found, a new row is added and a map is added to the row
 function reinsertMap(ideaName) {
 
-	//if (placesIPicked.indexOf(ideaName)){
-	//	console.log(ideaName + ' already has a map posted')
-	//}
-
-	//else {
-		for (var i = 0; i < toDoArray.length; i++) {
-			if (toDoArray[i].msgText === ideaName) {
-				addRow(toDoArray[i]);
-				initMap(toDoArray[i].msgText, toDoArray[i].searchFor);
-			}
+	for (var i = 0; i < toDoArray.length; i++) {
+		if (toDoArray[i].msgText === ideaName) {
+			addRow(toDoArray[i]);
+			initMap(toDoArray[i].msgText, toDoArray[i].searchFor);
 		}
-	//}
+	}
+
 }
 function addToSubMenu (msgObject) {
 
@@ -201,6 +214,7 @@ function addRow (msgObject) {
 	var val1 = newRow.insertCell(1);
 	var mapVal = newRow.insertCell(2);
 	val1.id = msgObject.msgText;
+	val1.className = 'funThingCell';
 
 	// create a div to be included in the data cell for the map
 	var mapDiv = document.createElement('div');
