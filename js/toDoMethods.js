@@ -6,7 +6,7 @@ var currIndex;
 var placesIPicked = [];
 
 $('document').ready(function () {
-	//getName();
+	getName();
 });
 
 // when the user clicks/chooses a phrase describing something to do, which is in a d iv with the id message, three things happen: 1) the to do object is added to the appropriate sub menu in the nav bar; 2) another row is added to the bottom of the webpage with the to do and 3) a map of where to find it is also added to the row
@@ -191,7 +191,7 @@ function addToSubMenu (msgObject) {
 	newListItem.appendChild(newAttribute);
 	theDropDown.insertBefore(newListItem, theDropDown.childNodes[0]);
 
-	// add an event listener to the new submenu item that will call reinsertMap when the item is clicked in the submenu; I want the item chosen from the submenu to be reinserted in the Map table, i.e. moved to the top row, when someone recalls it from the submenu
+	// add an event listener to the new submenu item that will call reinsertMap when the item is clicked in the submenu; TODO the item chosen from the submenu to be reinserted in the Map table, i.e. moved to the top row, when someone recalls it from the submenu
 	newListItem.addEventListener('click', function () {
 		var aItem = this.getElementsByTagName('a');
 
