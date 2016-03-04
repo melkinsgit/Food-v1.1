@@ -1,3 +1,4 @@
+// declaring global vars for access in various functions
 var map;
 var infowindow;
 var service;
@@ -10,11 +11,16 @@ $('document').ready(function () {
 
 // when the user clicks/chooses a phrase describing something to do, which is in a d iv with the id message, three things happen: 1) the to do object is added to the appropriate sub menu in the nav bar; 2) another row is added to the bottom of the webpage with the to do and 3) a map of where to find it is also added to the row
 $('#message').mousedown(function() {
-
-	placesIPicked.push(toDoArray[currIndex]);
-	addToSubMenu(toDoArray[currIndex]);
-	addRow(toDoArray[currIndex]);
-	initMap(toDoArray[currIndex].msgText, toDoArray[currIndex].searchFor);
+	if (placesIPicked.indexOf(toDoArray[currIndex])) {
+		placesIPicked.push(toDoArray[currIndex]);
+		console.log(placesIPicked);
+		addToSubMenu(toDoArray[currIndex]);
+		addRow(toDoArray[currIndex]);
+		initMap(toDoArray[currIndex].msgText, toDoArray[currIndex].searchFor);
+	}
+	else {
+		console.log('it\'s already in the array');
+	}
 
 });
 
@@ -89,8 +95,7 @@ function createMarker(place) {
 	service.getDetails(request, function(details) {
 		google.maps.event.addListener(marker, 'click', function() {
 			if(details) {
-				console.log('there are marker details like ' + details.name);
-				infowindow.setContent(details.name + "<br />" + details.formatted_address + "<br />" + details.website + "<br />" + details.rating + "<br />" + details.formatted_phone_number);
+				infowindow.setContent(details.name + "<br />" + details.formatted_address + "<br />" + details.website + "<br /> 5-point Rating: " + details.rating + "<br />" + details.formatted_phone_number);
 				addDetailsToRow(details);
 			}
 			else {
@@ -136,14 +141,20 @@ function getName(){
 }
 
 // this function takes the message string name and finds the object it belongs to among the objects in the to do Array; when the match is found, a new row is added and a map is added to the row
-function getMsgObj(ideaName) {
-	for (var i = 0; i < toDoArray.length; i++){
-		if (toDoArray[i].msgText === ideaName){
-			addRow(toDoArray[i]);
-			initMap(toDoArray[i].msgText, toDoArray[i].searchFor);
-		}
-	}
+function reinsertMap(ideaName) {
 
+	//if (placesIPicked.indexOf(ideaName)){
+	//	console.log(ideaName + ' already has a map posted')
+	//}
+
+	//else {
+		for (var i = 0; i < toDoArray.length; i++) {
+			if (toDoArray[i].msgText === ideaName) {
+				addRow(toDoArray[i]);
+				initMap(toDoArray[i].msgText, toDoArray[i].searchFor);
+			}
+		}
+	//}
 }
 function addToSubMenu (msgObject) {
 
@@ -166,13 +177,13 @@ function addToSubMenu (msgObject) {
 	newListItem.appendChild(newAttribute);
 	theDropDown.insertBefore(newListItem, theDropDown.childNodes[0]);
 
-	// add an event listener to the new submenu item that will call getMsgObj when the item is clicked in the submenu
+	// add an event listener to the new submenu item that will call reinsertMap when the item is clicked in the submenu; I want the item chosen from the submenu to be reinserted in the Map table, i.e. moved to the top row, when someone recalls it from the submenu
 	newListItem.addEventListener('click', function () {
 		var aItem = this.getElementsByTagName('a');
 
 		// got the var arrayVar = [].slice.call(HTMLCollection) from stackoverflow: http://stackoverflow.com/questions/222841/most-efficient-way-to-convert-an-htmlcollection-to-an-array
 		var aArr = [].slice.call(aItem);
-		getMsgObj(aArr[0].innerHTML); // there is only one
+		reinsertMap(aArr[0].innerHTML); // there is only one
 		}
 	);
 }
